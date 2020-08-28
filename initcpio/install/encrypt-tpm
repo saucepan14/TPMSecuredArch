@@ -1,0 +1,38 @@
+#!/bin/bash
+
+build() {
+    local mod
+    add_binary /usr/bin/tpm2_unseal
+    add_binary "/usr/lib/libtss2-tcti-device.so.0"
+
+    #export TPM2TOOLS_TCTI="device:/dev/tmp0"
+
+    add_runscript
+
+    cat >"$BUILDROOT/usr/lib/systemd/system/tpm.service" <<EOF
+[Unit]
+Description=Get Key From TPM
+Before=cryptsetup-pre.target
+DefaultDependencies=no
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStartPre=/usr/bin/modprobe tpm_tis
+ExecStart=/hooks/encrypt-tpm run_hook
+EOF
+
+    add_systemd_unit cryptsetup-pre.target
+    cd "$BUILDROOT/usr/lib/systemd/system/sysinit.target.wants"
+    ln -sf ../cryptsetup-pre.target cryptsetup-pre.target
+    ln -sf ../tpm.service tpm.service
+
+}
+
+help() {
+    cat <<HELPEOF
+This hook allows for reading the encryption key from TPM.
+HELPEOF
+}
+
+# vim: set ft=sh ts=4 sw=4 et:
