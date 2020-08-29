@@ -79,11 +79,10 @@ warning: data remaining[1231832 vs 1357089]: gaps between PE/COFF sections?
 ```
 I do not know what these warnings are but they do not seem to cause issue. If you do understand these warning and know how to fix them or clearify what they please let me know and I will be sure to add it and credit you.
 
-###TODO this has misinformation I need to fix very soon
-###TODO in my case I needed to add the .auth files to secure boot
-###TODO and having a 3rd party DB key is not bad as the tpm will give a different pcr:7 value
-###TODO this can essentially tell the system that another binary is good but not good with needed key to allow for reading the keyfile
-###TODO Also there are some repeating sentences that need work. Should have proof read more :/
+# TODO this has misinformation I need to fix very soon
+In my case I needed to add the .auth files to secure boot, also having a 3rd party DB key is not bad as the tpm will give a different pcr:7 value
+this can essentially tell the system that another binary is good but not good with needed key to allow for reading the keyfile.
+Also there are some repeating sentences that need work. Should have proof read more :/
 
 After you have created your keys and signed the EFI file you need to load the files with the *.cer, *.esl and *.auth extentions onto an unencrypted flash drive prefereably with FAT32 file system (you may be able to use a different file system but I have not tried to so test at your own risk). Once this is done you will need to get into your computers bios and first clear the existing keys. You want to clear the existing keys other wise and keys already trusted in secure boot will be able to be used to verify a binary that isn't signed by you and get your keyfile from the tpm. Once you have cleared the keys you need to add your personal keys. It is preferable to add the keys starting with the DB then the KEK and then the PK. I my case I used the *.esl files however your scenario may be different. After you have added the necascary files ensure secure boot is enabled and boot back into your Arch install. If you are unable to boot back into your Arch install your bios may have disabled non secure boot verified images from booting you can change this but be sure to doulbe check if you signed the EFI correctly and if you added the right files to secure boot.
 
