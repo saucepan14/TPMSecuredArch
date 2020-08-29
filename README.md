@@ -79,7 +79,8 @@ warning: data remaining[1231832 vs 1357089]: gaps between PE/COFF sections?
 ```
 I do not know what these warnings are but they do not seem to cause issue. If you do understand these warning and know how to fix them or clearify what they please let me know and I will be sure to add it and credit you.
 
-# TODO this has misinformation I need to fix very soon
+## TODO:
+### this has misinformation I need to fix very soon
 In my case I needed to add the .auth files to secure boot, also having a 3rd party DB key is not bad as the tpm will give a different pcr:7 value
 this can essentially tell the system that another binary is good but not good with needed key to allow for reading the keyfile.
 Also there are some repeating sentences that need work. Should have proof read more :/
