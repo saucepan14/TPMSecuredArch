@@ -1,6 +1,6 @@
 # TPM Secured Arch
 
-This repo contains various files used in Arch Linux root partition to be securley encrypted and unlocked without requiring a password. It uses a luks based encryption and adds a systemd unit to the initramfs to get the key from the tpm. This page assumes you have installed Arch before and are comforartable installing it on your own. It also assumes you have a tpm in your machine, you have access to controlling secure boot keys and you can boot with UEFI mode as I am only using UEFI for this. I am also using systemd boot instead of grub in my case however, if you are using grub you may still be able to apply some of this to your setup.
+This repo contains various files used in Arch Linux root partition to be securely encrypted and unlocked without requiring a password. It uses a luks based encryption and adds a systemd unit to the initramfs to get the key from the tpm. This page assumes you have installed Arch before and are comforartable installing it on your own. It also assumes you have a tpm in your machine, you have access to controlling secure boot keys and you can boot with UEFI mode as I am only using UEFI for this. I am also booting directly to an EFI file and am not using a boot loader, if you are using one you are kind of own your own I have not tested using a boot loader with secure boot but I do not feel that it is impossible to use a boot loader and have secure boot verifiy signed images.
 
 ## Important notes to consider
 
@@ -11,7 +11,7 @@ There are 3 packages you will need for this (along with their dependencies) they
 
 When installing you Arch linux you will need at least 3 partitions. A 512M EFI partition, A swap partition with at least how much ram your system has, and a root partition which can whatever size you please. If you wish to have other encrypted partitions please see the further reading section.
 
-After creating all the partitions necassery you will need to encrpyt the root and swap partitions, this can be done with the following command:
+After creating all the partitions necessary you will need to encrpyt the root and swap partitions, this can be done with the following command:
 ```
 cryptsetup luksFormat /dev/[the partiion you wish to encrypt]
 ```
@@ -19,15 +19,15 @@ Be sure to choose a strong password as the encryption is only as strong as your 
 
 You will need to do this twice, once for the root partition and once for the swap partition.
 
-Please note this will erase your data on that partition so be sure to copy and imporatant data somewhere.
+Please note this will erase your data on that partition so be sure to copy and important data somewhere.
 
 
-## Mounting the root partition and generating some of the imporant files
+## Mounting the root partition and generating some of the important files
 
 You will next need to decrpyt the now encrypted root partition so you can mount it and install Arch onto it.
-It will not be nesacarry to decrypt to swap partion right now, it will be done later on.
+It will not be necessary to decrypt to swap partition right now, it will be done later on.
 
-You can decrypt the partition with the follwing
+You can decrypt the partition with the following
 ```
 cryptsetup open --type luks /dev/[the name of you encrypted partion i.e. /dev/sda2, /dev/sdb3, /dev/nvme0n1p2, etc]
 ```
@@ -35,9 +35,9 @@ Then mount the now decrypted partion and continue installing Arch as normal
 
 Mount with this command
 ```
-mount /dev/mapper/root /mmt
+mount /dev/mapper/root /mnt
 ```
-After you have arch-chrooted into the now mounted partion you will need to be sure to generate /etc/fstab using the following:
+After you have arch-chrooted into the now mounted partition you will need to be sure to generate /etc/fstab using the following:
 ```
 genfstab -U -p /mnt /mnt/etc/fstab
 ```
@@ -64,11 +64,11 @@ Once in the image we will get working on generating Secure boot and signing the 
 
 ## Creating keys to be used in secure boot and signing the EFI stub
 
-Once you have craeted an EFI stub you will need to sign it so secure boot can verify that it is trusted by you.
+Once you have created an EFI stub you will need to sign it so secure boot can verify that it is trusted by you.
 The first step is to run the mkkeys.sh script, this will create a total of 17 files with 3 of them being secret keys that you need to keep somewhere secure. If they are not secured properly then someone and sign an os boot into it and get the keyfile to your drive which is obviously bad. 
-Of note is that mkkeys.sh will create the keys in the directory that the script is run so if you run the script in ~/ then it will generate all the keys and associtated files and place them in your home directory. While not necsacerally a bad thing you might want to make a new directory and cd into it and run the script from there to avoid unnecassary clutter. 
+Of note is that mkkeys.sh will create the keys in the directory that the script is run so if you run the script in ~/ then it will generate all the keys and associated files and place them in your home directory. While not necessarily a bad thing you might want to make a new directory and cd into it and run the script from there to avoid unnecessary clutter. 
 
-When running mkkeys.sh it will prompt you to give the gives common name it is not necassry but I don't see why not adding them.
+When running mkkeys.sh it will prompt you to give the gives common name it is not necessary but I don't see why not adding them.
 
 Once you have your keys and the .cer, .auth, .esl, and .crt files you next need to sign the EFI stub, this can be done with the following command:
 ```
@@ -80,13 +80,13 @@ After this command is run you may get a warning along the lines of
 ```
 warning: data remaining[1231832 vs 1357089]: gaps between PE/COFF sections?
 ```
-I do not know what these warnings are but they do not seem to cause issue. If you do understand these warning and know how to fix them or clearify what they please let me know and I will be sure to add it and credit you.
+I do not know what these warnings are but they do not seem to cause issue. If you do understand these warning and know how to fix them or clarify what they please let me know and I will be sure to add it and credit you.
 
 ## Adding keys to secure boot
 
-If you wish to still boot into windows and want it verified by secure boot you should save the pre loaded Microsft KEK and DB key and add them after all the other keys have been added. This should work, however I still have not tested it and there will be links for more information in the further reading section.
+If you wish to still boot into windows and want it verified by secure boot you should save the pre loaded Microsoft KEK and DB key and add them after all the other keys have been added. This should work, however I still have not tested it and there will be links for more information in the further reading section.
 
-After having optionally saved the Microsoft keys to your flashdrive you can clear the keys and then add your own. In my case I only added the .auth files but this may be different for you. You can try fiddling around with the keys geussing and checking which one is correct or maybe your mother board manaul has some information.
+After having optionally saved the Microsoft keys to your flashdrive you can clear the keys and then add your own. In my case I only added the .auth files but this may be different for you. You can try fiddling around with the keys guessing and checking which one is correct or maybe your mother board manual has some information.
 When adding the keys it is preferable to add the keys starting with the DB then the KEK and then the PK. You need to be sure to replace the PK keys with your own and not Microsoft's or any other 3rd party's, as it is the top key in secure boot. 
 
 Of note is that if an image boots being verified by secure boot it will generate a pcr 7 value depending on which key verified it. So even if you a Windows image signed by Microsoft it will not be able to get your tpm secrets stored against and imaged signed by you.
@@ -96,11 +96,11 @@ Also of note the exact process of adding secure boot keys is bios specific and I
 After adding all the keys boot into the signed image.
 
 
-## Creating the tpm policiy and adding a keyfile to luks
+## Creating the tpm policy and adding a keyfile to luks
 
-Next we will need to add a keyfile to the luks encrypted partition and store it in the tpm. We will be creating a 256 bit (i.e. 32 byte) keyfile using data from /dev/random this makes the keyfile very hard to brute force and takes away the trouble of having to create a strong keyfile on your own. A copy of the keyfile will be stored within the encrypted partition which is not a big security concern as long as you don't leave your computer unattended with the keyfile readable by any user, or someone having access to your encrpyed partition in which case you have bigger problems. 
+Next we will need to add a keyfile to the luks encrypted partition and store it in the tpm. We will be creating a 256 bit (i.e. 32 byte) keyfile using data from /dev/random this makes the keyfile very hard to brute force and takes away the trouble of having to create a strong keyfile on your own. A copy of the keyfile will be stored within the encrypted partition which is not a big security concern as long as you don't leave your computer unattended with the keyfile readable by any user, or someone having access to your encrypted partition in which case you have bigger problems. 
 
-To create the keyfile use the follwing command:
+To create the keyfile use the following command:
 ```
 dd if=/dev/random of=/root/root_keyfile.bin bs=1 count=32
 ```
@@ -115,15 +115,15 @@ with
 
 This creates two keyfiles in /root/, we will only using /root/root_keyfile.bin for now, but GenTPMPolicy expects both swap and root keyfiles so we create both.
 
-If you are worried about accidently overwriting them use:
+If you are worried about accidentally overwriting them use:
 ```
 chmod 0400 /root/root_keyfile.bin && chmod 0400 /root/swap_keyfile.bin
 ```
 To set it to read only.
 
-The we will be adding the key to luks with the follwing command:
+The we will be adding the key to luks with the following command:
 ```
-cryptsetup luksAddKey /dev/[name of the encrpyed root partion i.e. /dev/sd1, /dev/nvme0n1p2, etc] /root/root_keyfile.bin
+cryptsetup luksAddKey /dev/[name of the encrypted root partition i.e. /dev/sd1, /dev/nvme0n1p2, etc] /root/root_keyfile.bin
 ```
 
 Next we need to store the keyfile in the tpm and seal it against the desired pcrs, in our case pcrs 0 and 7. Before we actually store the keys in the tpm I suggest storing a test file in the tpm. First create a test file with some simple text in it. Then seal with with the following commands:
@@ -153,7 +153,7 @@ tpm2_getcap handles-persistent
 
 and replace ```0x81000000``` with the value returned from the previous command.
 
-To test if it will only give away the to images signed by you turnoff your computer and boot into the unsigned image, and run the same command again. If you recive a tpm error then it means your secure boot is working correctly, if you still get the value of the file returned then your secure boot is not working correctly and is giving away the key only to unsigned images. I recommed changing which files you uploaded to secure boot. I.E. uploading .esl files instead of .auth files. The goal is to have the tpm only give you the key to images signed by you. If you wish to remove the saved file from the tpm use:
+To test if it will only give away the to images signed by you turnoff your computer and boot into the unsigned image, and run the same command again. If you receive a tpm error then it means your secure boot is working correctly, if you still get the value of the file returned then your secure boot is not working correctly and is giving away the key only to unsigned images. I recommend changing which files you uploaded to secure boot. I.E. uploading .esl files instead of .auth files. The goal is to have the tpm only give you the key to images signed by you. If you wish to remove the saved file from the tpm use:
 
 ```
 tpm2_evictcontrol -C o -c 0x81000000
@@ -205,17 +205,17 @@ You will then need to modify the HOOKS() line again to add the custom hook. It s
 HOOKS(base systemd autodetect sd-vconsole modconf block encrypt-tpm sd-encrpyt filesystem keyboard fsck)
 ```
 
-After you have done this regenearte the boot related images with
+After you have done this regenerate the boot related images with
 
 ```
 mkinitcpio -p linux
 ```
 
-Then recreate the stub and sign it with GenStub and SignEFI (in the order). Ensure that the locations of keys files in SignEFI match where you have your stored, if they are stored somewhere else modifiy the file and then run it.
+Then recreate the stub and sign it with GenStub and SignEFI (in the order). Ensure that the locations of keys files in SignEFI match where you have your stored, if they are stored somewhere else modify the file and then run it.
 
 Then if all is correct you should be able to turn off your restart your system and have it decrypt itself!
 
-If the system fails to decrpyt itself using the commands:
+If the system fails to decrypt itself using the commands:
 
 ```
 journalctl -b | grep -i tpm
@@ -227,9 +227,9 @@ and
 journalctl -b | grep -i keyfile
 ```
 
-Should help point you in the right direction for debuging.
+Should help point you in the right direction for debugging.
 
-If in the future after you have had this setup working if the auto decryption does not work and prompts you for a password you should consider how much you trust the image. As someone could have modified it without you knowing and could have something malicious within it. If you do not trust the image completetly it would be best to load to a live usb (with an image that you know is safe), decrypt the drive and regenerate the EFI stub and sign it again and see if that fixes the issue. (This step assumes you have /boot under the encrypted partition and only /EFI is unencrypted, conatining only the EFI stub).
+If in the future after you have had this setup working if the auto decryption does not work and prompts you for a password you should consider how much you trust the image. As someone could have modified it without you knowing and could have something malicious within it. If you do not trust the image completely it would be best to load to a live usb (with an image that you know is safe), decrypt the drive and regenerate the EFI stub and sign it again and see if that fixes the issue.
 
 ## Decrypting swap partition and hibernation.
 
@@ -273,4 +273,4 @@ systemctl hibernate
 Whenever this script run it locks my display manager and then hibernates the computer.
 
 ## Further reading
-This section will go into more detail about each of the files and how exaclty they work with the system it is not currently filled out yet but I have plans to create largers write ups for each of the files. It will also includes links to a lot of sources where I got a majority of the code from alone with more helpful reading you can go through if you wish to learn more. If you are having trouble getting this setup you can conatact me and I will try to help, however I do not always check github so it might take me a little bit to get back. If you wish to help by clearing up anything I said here or by correcting things I may have gotten wrong please contact me so I can make those changes propmtley and avoid confusing and/or misguideing anyone else. There is still a lot more work to be done to this readme and I plan to work on that in another branch.
+This section will go into more detail about each of the files and how exactly they work with the system it is not currently filled out yet but I have plans to create larger write ups for each of the files. It will also includes links to a lot of sources where I got a majority of the code from alone with more helpful reading you can go through if you wish to learn more. If you are having trouble getting this setup you can contact me and I will try to help, however I do not always check github so it might take me a little bit to get back. If you wish to help by clearing up anything I said here or by correcting things I may have gotten wrong please contact me so I can make those changes promptly and avoid confusing and/or misguiding anyone else. There is still a lot more work to be done to this readme and I plan to work on that in another branch.
