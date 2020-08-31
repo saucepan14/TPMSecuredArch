@@ -3,7 +3,7 @@ This repo contains various files used in Arch Linux root partition to be securle
 
 ## Important notes to consider
 
-# I currently have a branch working with /boot being encrypted and only /efi being unecrypted with a signed image, as well as having an encrypted swap partition that works with suspend to disk with be posting updated files and read me soon
+### I currently have a branch working with /boot being encrypted and only /efi being unecrypted with a signed image, as well as having an encrypted swap partition that works with suspend to disk with be posting updated files and read me soon
 
 I am working on having /boot be part of the encrypted file system and only having a seperate partition for /EFI conataning only the EFI stub so that you will not need to worry about someone modify the initramfs, vmlinuz-linux and cmdline files that would reside on the noramlly unencrypted boot partition. Should my theory work you may not need to install a boot loader at all! this will also allow for securley regenerating the EFI stub should it fail the secure boot check. I have not made these changes yet but feel free to try this on your own just understand that some of the provided files will need to be modified in order to get it working. I have also not yet experimented with an encrypted swap partition while this might not be a concern to a desktop with large ammounts of memory this is a concern if you do not have a lot of spare memory or if you are using a laptop and want to safley suspend to disk. I will be working on both of these issues and will post my findings. I also wish to explore setting up tpm based decryption on other distros mainly debian based distros and opensuse.
 
