@@ -273,11 +273,12 @@ systemctl hibernate
 Whenever this script run it locks my display manager and then hibernates the computer.
 However be sure to check if dm-tool lock will actually stop anyone from getting back into your computer. If you do not have a screen saver package you can use ctrl+alt+F8 to gain access back to your desktop. So please try this before counting is as secure. If you use lightdm as your display manager I reccomned using light-locker, it is still a little finicky for me but it does the job well enough.
 
-## Further reading
+## Links to further reading + sources
 
-# Links to further reading + sources
 If you wish to read more about the tpm2-tools package and what it can do the mankier page is a great place to start.
-# General Further reading:
+
+### General Further reading:
+
 It can be found here:
 https://www.mankier.com/package/tpm2-tools
 
@@ -287,7 +288,8 @@ https://wiki.archlinux.org/index.php/Dm-crypt/Swap_encryption
 More information for understanding on suspend and hibernation in linux can be found here:
 https://wiki.archlinux.org/index.php/Power_management/Suspend_and_hibernate
 
-# Sources and more further reading
+### Sources and more further reading
+
 Most of the shell included is not mine and is made by other people, I have just combined various bits to fit my needs you can find links to major sources below.
 
 mkkeys.sh + more information on secure boot:
