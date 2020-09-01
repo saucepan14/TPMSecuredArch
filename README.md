@@ -271,6 +271,35 @@ dm-tool lock
 systemctl hibernate
 ```
 Whenever this script run it locks my display manager and then hibernates the computer.
+However be sure to check if dm-tool lock will actually stop anyone from getting back into your computer. If you do not have a screen saver package you can use ctrl+alt+F8 to gain access back to your desktop. So please try this before counting is as secure. If you use lightdm as your display manager I reccomned using light-locker, it is still a little finicky for me but it does the job well enough.
 
 ## Further reading
-This section will go into more detail about each of the files and how exactly they work with the system it is not currently filled out yet but I have plans to create larger write ups for each of the files. It will also includes links to a lot of sources where I got a majority of the code from alone with more helpful reading you can go through if you wish to learn more. If you are having trouble getting this setup you can contact me and I will try to help, however I do not always check github so it might take me a little bit to get back. If you wish to help by clearing up anything I said here or by correcting things I may have gotten wrong please contact me so I can make those changes promptly and avoid confusing and/or misguiding anyone else. There is still a lot more work to be done to this readme and I plan to work on that in another branch.
+
+# Links to further reading + sources
+If you wish to read more about the tpm2-tools package and what it can do the mankier page is a great place to start.
+# General Further reading:
+It can be found here:
+https://www.mankier.com/package/tpm2-tools
+
+For further reading on encrypred swap you can find information on the Arch Wiki:
+https://wiki.archlinux.org/index.php/Dm-crypt/Swap_encryption
+
+More information for understanding on suspend and hibernation in linux can be found here:
+https://wiki.archlinux.org/index.php/Power_management/Suspend_and_hibernate
+
+# Sources and more further reading
+Most of the shell included is not mine and is made by other people, I have just combined various bits to fit my needs you can find links to major sources below.
+
+mkkeys.sh + more information on secure boot:
+https://www.rodsbooks.com/efi-bootloaders/controlling-sb.html
+
+GenStub + GenTPMPolicy:
+https://medium.com/@pawitp/full-disk-encryption-on-arch-linux-backed-by-tpm-2-0-c0892cab9704
+https://medium.com/@pawitp/its-certainly-annoying-that-tpm2-tools-like-to-change-their-command-line-parameters-d5d0f4351206
+https://medium.com/@pawitp/the-correct-way-to-use-secure-boot-with-linux-a0421796eade
+
+install/encrypt-tpm:
+https://bbs.archlinux.org/viewtopic.php?id=248836
+https://github.com/archont00/arch-linux-luks-tpm-boot
+
+Longer descritptions are soon to come.
