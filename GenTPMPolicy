@@ -1,8 +1,15 @@
-##/proc/cmdline
-
 tpm2_createpolicy --policy-pcr -l sha1:0,7 -L policy.digest
+
 tpm2_createprimary -C e -g sha1 -G rsa -c primary.context
-tpm2_create -g sha256 -u obj.pub -r obj.priv -C primary.context -L policy.digest -a "noda|adminwithpolicy|fixedparent|fixedtpm" -i /root/secret.bin
+
+tpm2_create -g sha256 -u obj.pub -r obj.priv -C primary.context -L policy.digest -a "noda|adminwithpolicy|fixedparent|fixedtpm" -i /root/root_keyfile.bin
 tpm2_load -C primary.context -u obj.pub -r obj.priv -c load.context
 tpm2_evictcontrol -C o -c load.context 0x81000000
+
+rm load.context obj.priv obj.pub
+
+tpm2_create -g sha256 -u obj.pub -r obj.priv -C primary.context -L policy.digest -a "noda|adminwithpolicy|fixedparent|fixedtpm" -i /root/swap_keyfile.bin
+tpm2_load -C primary.context -u obj.pub -r obj.priv -c load.context
+tpm2_evictcontrol -C o -c load.context
+
 rm load.context obj.priv obj.pub policy.digest primary.context

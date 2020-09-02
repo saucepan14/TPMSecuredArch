@@ -3,8 +3,9 @@
 run_hook() {
     
     echo getting secret from TPM...
-    /usr/bin/tpm2_unseal -c 0x81000000 -p pcr:sha1:0,7 > /crypto_keyfile.bin
-    chmod 0400 /crypto_keyfile.bin
+    /usr/bin/tpm2_unseal -c 0x81000000 -p pcr:sha1:0,7 > /root_keyfile.bin
+    /usr/bin/tpm2_unseal -c 0x81000001 -p pcr:sha1:0,7 > /swap_keyfile.bin
+    chmod 0400 /root_keyfile.bin
 }
 
 # vim: set ft=sh ts=4 sw=4 et:
