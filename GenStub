@@ -3,4 +3,4 @@ objcopy \
     --add-section .cmdline="/boot/cmdline" --change-section-vma .cmdline=0x30000 \
     --add-section .linux="/boot/vmlinuz-linux" --change-section-vma .linux=0x40000 \
     --add-section .initrd="/boot/initramfs-linux.img" --change-section-vma .initrd=0x3000000 \
-    "/usr/lib/systemd/boot/efi/linuxx64.efi.stub" "/boot/EFI/Linux/Linux.efi"
+    "/usr/lib/systemd/boot/efi/linuxx64.efi.stub" "/EFI/Linux/Linux.efi"
