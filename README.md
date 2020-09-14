@@ -302,8 +302,10 @@ https://www.rodsbooks.com/efi-bootloaders/controlling-sb.html
 GenStub + GenTPMPolicy:
 
 https://medium.com/@pawitp/full-disk-encryption-on-arch-linux-backed-by-tpm-2-0-c0892cab9704
+
 https://medium.com/@pawitp/its-certainly-annoying-that-tpm2-tools-like-to-change-their-command-line-parameters-d5d0f4351206
-https://medium.com/@pawitp/the-correct-way-to-use-secure-boot-with-linux-a0421796eade
+
+https://medium.com/@pawitp/the-correct-way-to-use-secure-boot-with-linux-a0421796eade 
 
 install/encrypt-tpm:
 
