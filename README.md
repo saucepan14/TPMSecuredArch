@@ -280,12 +280,15 @@ If you wish to read more about the tpm2-tools package and what it can do the man
 ### General Further reading:
 
 It can be found here:
+
 https://www.mankier.com/package/tpm2-tools
 
 For further reading on encrypred swap you can find information on the Arch Wiki:
+
 https://wiki.archlinux.org/index.php/Dm-crypt/Swap_encryption
 
 More information for understanding on suspend and hibernation in linux can be found here:
+
 https://wiki.archlinux.org/index.php/Power_management/Suspend_and_hibernate
 
 ### Sources and more further reading
@@ -293,14 +296,17 @@ https://wiki.archlinux.org/index.php/Power_management/Suspend_and_hibernate
 Most of the shell included is not mine and is made by other people, I have just combined various bits to fit my needs you can find links to major sources below.
 
 mkkeys.sh + more information on secure boot:
+
 https://www.rodsbooks.com/efi-bootloaders/controlling-sb.html
 
 GenStub + GenTPMPolicy:
+
 https://medium.com/@pawitp/full-disk-encryption-on-arch-linux-backed-by-tpm-2-0-c0892cab9704
 https://medium.com/@pawitp/its-certainly-annoying-that-tpm2-tools-like-to-change-their-command-line-parameters-d5d0f4351206
 https://medium.com/@pawitp/the-correct-way-to-use-secure-boot-with-linux-a0421796eade
 
 install/encrypt-tpm:
+
 https://bbs.archlinux.org/viewtopic.php?id=248836
 https://github.com/archont00/arch-linux-luks-tpm-boot
 
