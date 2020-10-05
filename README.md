@@ -126,16 +126,7 @@ The we will be adding the key to luks with the following command:
 cryptsetup luksAddKey /dev/[name of the encrypted root partition i.e. /dev/sd1, /dev/nvme0n1p2, etc] /root/root_keyfile.bin
 ```
 
-Next we need to store the keyfile in the tpm and seal it against the desired pcrs, in our case pcrs 0 and 7. Before we actually store the keys in the tpm I suggest storing a test file in the tpm. First create a test file with some simple text in it. Then seal with with the following commands:
-
-```
-tpm2_createpolicy --policy-pcr -l sha1:0,7 -L policy.digest
-tpm2_createprimary -C e -g sha1 -G rsa -c primary.context
-tpm2_create -g sha256 -u obj.pub -r obj.priv -C primary.context -L policy.digest -a "noda|adminwithpolicy|fixedparent|fixedtpm" -i /home/$USER/testfile
-tpm2_load -C primary.context -u obj.pub -r obj.priv -c load.context
-tpm2_evictcontrol -C o -c load.context 0x81000000
-rm load.context obj.priv obj.pub policy.digest primary.context
-```
+Next we need to store the keyfile in the tpm and seal it against the desired pcrs, in our case pcrs 0 and 7. Before we actually store the keys in the tpm I suggest storing a test file in the tpm. First create a test file with some simple text in it. Then seal with with the GenTPMPolicy script
 
 To test if you can read the file from the tpm use
 
@@ -159,7 +150,7 @@ To test if it will only give away the to images signed by you turnoff your compu
 tpm2_evictcontrol -C o -c 0x81000000
 ```
 
-After evicting the file you can run the previous commands to re add the file to the tpm under (hopefully) correct pcr values.
+After evicting the file you can run the previous commands to re-add the file to the tpm under (hopefully) correct pcr values.
 
 Once you have verified the tpm will only give away files when booted into images signed by you boot into a signed image and first evict control of any information already in the tpm with:
 
