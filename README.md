@@ -8,7 +8,7 @@ Most of the shell is not mine I have modified parts of shell from other people i
 There are 3 packages you will need for this (along with their dependencies) they are tpm2-tools, sbsign, python3 and efitools. 
 Also of note is that in the current process the guide will go through I belive it is possible to intercept the keyfile if someone was sniffing the TPM bus when the keyfile is given out. A way around this would be to use an HMAC session with the TPM so the communication would be encrypted or to require a pin on top of having correct pcrs values in order to relase the key. I will work on getting around to implenting the latter at some point but given that it would require specialized tools I do not consider this but an extremely important issue but I still consider it to be an important one to be aware of.
 
-## Creating an encrpyted root and swap partition
+## Creating an encrypted root and swap partition
 
 When installing you Arch linux you will need at least 3 partitions. A 512M EFI partition, A swap partition with at least how much ram your system has, and a root partition which can whatever size you please. If you wish to have other encrypted partitions please see the further reading section.
 
