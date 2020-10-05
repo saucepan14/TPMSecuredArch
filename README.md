@@ -264,6 +264,10 @@ systemctl hibernate
 Whenever this script run it locks my display manager and then hibernates the computer.
 However be sure to check if dm-tool lock will actually stop anyone from getting back into your computer. If you do not have a screen saver package you can use ctrl+alt+F8 to gain access back to your desktop. So please try this before counting is as secure. If you use lightdm as your display manager I reccomned using light-locker, it is still a little finicky for me but it does the job well enough.
 
+## Things of note
+
+In the current process the guide has gone through I belive it is possible to intercept the keyfile if someone was sniffing the TPM bus when the keyfile is given out. A way around this would be to use an HMAC session with the TPM so the communication would be encrypted or to require a pin on top of having correct pcrs values in order to relase the key. I will work on getting around to implenting the latter at some point but given that it would require specialized tools I do not consider this but an extremely important issue but I still consider it to be an important one to be aware of.
+
 ## Links to further reading + sources
 
 If you wish to read more about the tpm2-tools package and what it can do the mankier page is a great place to start.
