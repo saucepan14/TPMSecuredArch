@@ -266,6 +266,13 @@ Whenever this script run it locks my display manager and then hibernates the com
 However be sure to check if dm-tool lock will actually stop anyone from getting back into your computer. If you do not have a screen saver package you can use ctrl+alt+F8 to gain access back to your desktop. So please try this before counting is as secure. If you use lightdm as your display manager I reccomned using light-locker, it is still a little finicky for me but it does the job well enough.
 
 
+## Pacman hooks for automatic stub generation and signing
+
+I highly recommend added the included pacman hooks to automatically create and sign an EFI stub, otherwise you will have to do this manually everytime you updated or your install won't boot. you will need to modify ```pacman.d/hooks/99-secureboot.hook``` and replace:
+```Exec = /usr/bin/sh -c "/path/to/GenStub; /path/to/SignEFI"```
+with the actual path to the scripts. If you are using an alternative kernel such as linux-lts or linux-zen you will need to modify:
+```Target = linux``` with the respective package of your kernel.
+
 ## Links to further reading + sources
 
 If you wish to read more about the tpm2-tools package and what it can do the mankier page is a great place to start.
