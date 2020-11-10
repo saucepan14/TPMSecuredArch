@@ -1,1 +1,1 @@
-sbsign --key /home/martin/Documents/PublicKeys/Secureboot/DB.key --cert /home/martin/Documents/PublicKeys/Secureboot/DB.crt --output /EFI/Linux/Linux-signed.efi /EFI/Linux/Linux.efi
+sbsign --key /path/to/DB.key --cert /path/to/DB.crt --output /EFI/Linux/Linux-signed.efi /EFI/Linux/Linux.efi

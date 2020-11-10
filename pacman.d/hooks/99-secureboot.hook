@@ -1,0 +1,14 @@
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = linux
+Target = systemd
+
+[Action]
+Description = Signing Kernel for SecureBoot...
+When = PostTransaction
+Exec = /usr/bin/sh -c "/path/to/GenStub; /path/to/SignEFI"
+Depends = sbsigntools
+Depends = findutils
+Depends = binutils
