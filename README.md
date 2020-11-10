@@ -207,7 +207,7 @@ After you have done this regenerate the boot related images with
 mkinitcpio -p linux
 ```
 
-Then recreate the stub and sign it with GenStub and SignEFI (in the order). Ensure that the locations of keys files in SignEFI match where you have your stored, if they are stored somewhere else modify the file and then run it.
+Next you will need to modify SignEFI and replace ```/path/to/DB.*``` with the path of your secureboot keys (i.e. where ever you ran the mkkeys.sh script). After that just run the script and it should sign the stub.
 
 Then if all is correct you should be able to turn off your restart your system and have it decrypt itself!
 
