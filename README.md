@@ -1,12 +1,14 @@
 # TPM Secured Arch
 
-This repo contains various files used in Arch Linux root partition to be securely encrypted and unlocked without requiring a password. It uses a luks based encryption and adds a systemd unit to the initramfs to get the key from the tpm. This page assumes you have installed Arch before and are comforartable installing it on your own. It also assumes you have a tpm in your machine, you have access to controlling secure boot keys and you can boot with UEFI mode as I am only using UEFI for this. I am also booting directly to an EFI file and am not using a boot loader, if you are using one you are kind of own your own I have not tested using a boot loader with secure boot but I do not feel that it is impossible to use a boot loader and have secure boot verifiy signed images.
+This repo contains various files used in Arch Linux root partition to be securely encrypted and unlocked without requiring a password. It uses a luks based encryption and adds a systemd unit to the initramfs to get the key from the TPM. This page assumes you have installed Arch before and are comforartable installing it on your own. It also assumes you have a TPM in your machine, you have access to controlling secure boot keys and you can boot with UEFI mode as I am only using UEFI for this. I am also booting directly to an EFI file and am not using a boot loader, if you are using one you are kind of own your own I have not tested using a boot loader with secure boot but I do not feel that it is impossible to use a boot loader and have secure boot verifiy signed images.
+
 
 ## Important notes to consider
 
 Most of the shell is not mine I have modified parts of shell from other people in order to fit my needs, however I will have a list of sources of where I got code from in the further reading section. I have only tested this with arch linux, while I wish to explose implamenting this in other distro (Namely Debian based distros) I do not have the time to test every distro I would like. Should you get a setup like this working on another distro I would like to add a link to your own git repo or to add how you did it and of course give you credit.
 There are 3 packages you will need for this (along with their dependencies) they are tpm2-tools, sbsign, python3 and efitools. 
 Also of note is that in the current process the guide will go through I belive it is possible to intercept the keyfile if someone was sniffing the TPM bus when the keyfile is given out. A way around this would be to use an HMAC session with the TPM so the communication would be encrypted or to require a pin on top of having correct pcrs values in order to relase the key. I will work on getting around to implenting the latter at some point but given that it would require specialized tools I do not consider this but an extremely important issue but I still consider it to be an important one to be aware of.
+
 
 ## Creating an encrypted root and swap partition
 
@@ -54,6 +56,7 @@ HOOKS(base systemd autodetect sd-vconsole modconf block sd-encrpyt filesystem ke
 
 We will still need to modify the config file again but this is all the is needed for now.
 
+
 ## Generating the EFI stub
 
 If you wish to use a bootloader to choose between multiple os installs you are on your own here as I have not gone with a setup like that and instead boot directly into my Arch install. IF you do get an install with a boot loader and multiple installs working with secure boot please let me know and I will add it. 
@@ -82,6 +85,7 @@ After this command is run you may get a warning along the lines of
 warning: data remaining[1231832 vs 1357089]: gaps between PE/COFF sections?
 ```
 I do not know what these warnings are but they do not seem to cause issue. If you do understand these warning and know how to fix them or clarify what they please let me know and I will be sure to add it and credit you.
+
 
 ## Adding keys to secure boot
 
@@ -223,6 +227,7 @@ Should help point you in the right direction for debugging.
 
 If in the future after you have had this setup working if the auto decryption does not work and prompts you for a password you should consider how much you trust the image. As someone could have modified it without you knowing and could have something malicious within it. If you do not trust the image completely it would be best to load to a live usb (with an image that you know is safe), decrypt the drive and regenerate the EFI stub and sign it again and see if that fixes the issue.
 
+
 ## Decrypting swap partition and hibernation.
 
 Now that you have a system that can decrypt itself at boot you can now add a swap partition that will decrypt at boot too!
@@ -256,14 +261,9 @@ After that you should be good to reboot and your system should now decrypt the b
 systemctl hibernate
 ```
 
-To note is that ```systemctl hibernate``` might not lock you display manager, at least it does not for me (I'm using lightdm), so to hibernate I created a simple script hibernate.sh with 2 commands
+To note is that ```systemctl hibernate``` might not lock you display manager, be sure you have a session manager installed to lock your system for you. I am personally using light-locker and have it set in the xfce4 power manager settings to lock whenever the computer is powered off (i.e. sleep or hibernating).
 
-```
-dm-tool lock
-systemctl hibernate
-```
-Whenever this script run it locks my display manager and then hibernates the computer.
-However be sure to check if dm-tool lock will actually stop anyone from getting back into your computer. If you do not have a screen saver package you can use ctrl+alt+F8 to gain access back to your desktop. So please try this before counting is as secure. If you use lightdm as your display manager I reccomned using light-locker, it is still a little finicky for me but it does the job well enough.
+If you wish to lock the computer without suspending or hibernating it you can use ```loginctl lock-session``` to simply sign out.
 
 
 ## Pacman hooks for automatic stub generation and signing
@@ -272,6 +272,7 @@ I highly recommend added the included pacman hooks to automatically create and s
 ```Exec = /usr/bin/sh -c "/path/to/GenStub; /path/to/SignEFI"```
 with the actual path to the scripts. If you are using an alternative kernel such as linux-lts or linux-zen you will need to modify:
 ```Target = linux``` with the respective package of your kernel.
+
 
 ## Links to further reading + sources
 
