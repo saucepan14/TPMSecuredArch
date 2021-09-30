@@ -1,4 +1,4 @@
-tpm2_createpolicy --policy-pcr -l sha1:0,7 -L policy.digest
+tpm2_createpolicy --policy-pcr -l sha256:0,1,7 -L policy.digest
 
 tpm2_createprimary -C e -g sha1 -G rsa -c primary.context
 
