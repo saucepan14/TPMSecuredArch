@@ -3,9 +3,9 @@
 build() {
     local mod
     add_binary /usr/bin/tpm2_unseal
-    add_binary "/usr/lib/libtss2-tcti-device.so.0"
+    add_file "/usr/lib/libtss2-tcti-device.so.0"
 
-    #export TPM2TOOLS_TCTI="device:/dev/tmp0"
+    export TPM2TOOLS_TCTI="device:/dev/tmp0"
 
     add_runscript
 
@@ -18,7 +18,9 @@ DefaultDependencies=no
 [Service]
 Type=oneshot
 RemainAfterExit=yes
+ExecStartPre=/usr/bin/modprobe tpm_tis_core
 ExecStartPre=/usr/bin/modprobe tpm_tis
+ExecStartPre=/usr/bin/modprobe tpm_crb
 ExecStart=/hooks/encrypt-tpm run_hook
 EOF
 
